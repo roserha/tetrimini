@@ -1,0 +1,61 @@
+{
+  "name": "zephyr",
+
+  // prebuilt image, NOT "build" -- otherwise vscode rebuilds on every open
+  "image": "zephyrcontainer",
+
+  // runs on the FEDORA HOST before the container starts. real shell, so
+  // $(...) works here. xhost grants die with the X server, hence every start.
+  // the mkdir matters: docker creates bind-mount sources as root-owned empty
+  // dirs if they don't exist, and then nvim can't write its state.
+  "initializeCommand": "mkdir -p ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim && xhost +SI:localuser:$(id -un) >/dev/null",
+
+  // this repo, mounted inside the workspace volume. Basename keeps it generic
+  // so the same file works for any repo name.
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/applications/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/workspace/applications/${localWorkspaceFolderBasename}",
+
+  "remoteUser": "zephyr",
+
+  "runArgs": [
+    "--rm",
+    "--privileged",
+    "--hostname", "zephyrserver",
+    "--name", "zephyrcontainer"
+  ],
+
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+
+  "mounts": [
+    // the zephyr workspace: source, modules, SDK, venv
+    "source=zephyr-workspace,target=/workspace,type=volume",
+
+    // X socket for the native_sim SDL window
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+
+    // usb / serial, for when the feather shows up
+    "source=/dev,target=/dev,type=bind",
+    "source=/run/media/${localEnv:USER},target=/run/media/zephyr,type=bind",
+
+    // lazyvim config + state
+    "source=${localEnv:HOME}/.config/nvim,target=/home/zephyr/.config/nvim,type=bind",
+    "source=${localEnv:HOME}/.local/share/nvim,target=/home/zephyr/.local/share/nvim,type=bind",
+    "source=${localEnv:HOME}/.local/state/nvim,target=/home/zephyr/.local/state/nvim,type=bind"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "trond-snekvik.devicetree",
+        "trond-snekvik.kconfig-lang"
+      ],
+      "settings": {
+        "C_Cpp.default.compileCommands": "${containerWorkspaceFolder}/build/compile_commands.json",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+/* Initial device tree overlay for Linux Native_Sim */
+
+#include <zephyr/dt-bindings/display/panel.h> /* Required for SDL window simulating */
+
+&sdl_dc{
+    width = <128>;
+    height = <64>;
+    pixel-format = <PANEL_PIXEL_FORMAT_MONO01>;
+};

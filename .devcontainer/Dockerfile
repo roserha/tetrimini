@@ -24,6 +24,7 @@ RUN \
         dpkg --add-architecture i386 && \
         apt-get update && \
         apt-get install -yq --no-install-recommends sudo build-essential git \
+          libsdl2-dev libsdl2-dev:i386 \
           python3-yaml libncursesw6 libncursesw6:i386 \
           python3 bash libncurses-dev locales \
           libc6-dev-i386 libssl-dev \
@@ -68,7 +69,7 @@ RUN printf '%s\n' \
     'else' \
     '  echo "workspace not bootstrapped -- run: bootstrap-workspace"' \
     'fi' \
-    'cd /workspace' >> /home/zephyr/.bashrc
+    'cd /workspace/applications/tetrimini' >> /home/zephyr/.bashrc
 
 # Add the future venv binaries directly to the system PATH.
 # This permanently activates the virtual environment for all subsequent RUN commands.

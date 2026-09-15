@@ -60,7 +60,7 @@ RUN chmod +x /usr/local/bin/bootstrap-workspace
 
 USER zephyr
 WORKDIR /home/zephyr
-RUN git config --global user.email "zephyr@example.com" && git config --global user.name "Zephyr Docker Container"
+RUN git config --global user.email "rorha04@gmail.com" && git config --global user.name "Rose Rodrigues"
 
 # activate venv!
 RUN printf '%s\n' \

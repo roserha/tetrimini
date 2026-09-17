@@ -49,7 +49,7 @@ void gfx_playfield();
 
 // Draws 5px-wide block using tetrimino coordinate system
 // x:  x coordinate
-// y:  y coordinate
-void gfx_block(uint8_t x, uint8_t y);
+// block_type: which block to draw based on block enum ids
+void gfx_block(uint8_t x, uint8_t y, uint8_t block_type);
 
 #endif

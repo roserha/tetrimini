@@ -11,15 +11,15 @@ int main(void)
 	gfx_playfield();
 
 	// t block
-	gfx_block(3, 2);
-	gfx_block(4, 2);
-	gfx_block(5, 2);
-	gfx_block(4, 3);
+	gfx_block(3, 2, 0);
+	gfx_block(4, 2, 0);
+	gfx_block(5, 2, 0);
+	gfx_block(4, 3, 0);
 
 	// full line
 	for (int i = 0; i < 10; i++)
 	{
-		gfx_block(i, 17);
+		gfx_block(i, 17, i % 7);
 	}
 
 	gfx_flush();

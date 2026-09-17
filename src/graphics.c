@@ -118,13 +118,77 @@ void gfx_playfield()
 // Draws 6px-wide block using tetrimino coordinate system
 // x:  x coordinate
 // y:  y coordinate
-void gfx_block(uint8_t x, uint8_t y)
+// block_type: which block to draw based on block enum ids
+void gfx_block(uint8_t x, uint8_t y, uint8_t block_type)
 {
+    // TODO: Change these to a table format to save on time??
     if (x >= 10 || y >= 18) { return; }
 
     uint8_t x_raw = y * 6 + 2;
     uint8_t y_raw = x * 6 + 2;
 
-    gfx_rect(x_raw, y_raw, 6, 6, true);
-    gfx_fill(x_raw + 2, y_raw + 2, 2, 2, true);
+    switch (block_type)
+    {
+        case 0: // T-Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            gfx_rect(x_raw + 1, y_raw + 1, 4, 4, false);
+            gfx_fill(x_raw + 2, y_raw + 2, 2, 2, true);
+            break;
+
+        case 1: // O Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            for (int j = 0; j < 4; j++) 
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    bool px_on = (i + j) & 1;
+                    gfx_px(x_raw + 1 + i, y_raw + 1 + j, px_on);
+                }
+            }
+            break;
+
+        case 2: // I Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            gfx_fill(x_raw + 1, y_raw + 1, 4, 4, false);
+            break;
+
+        case 3: // S-Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            gfx_fill(x_raw + 1, y_raw + 1, 4, 4, true);
+            for (int i = 0; i < 4; i++)
+            {
+                gfx_px(x_raw + 4 - i, y_raw + 1 + i, false);
+                gfx_px(x_raw + 1 + i, y_raw + 1 + i, false);
+            }
+            break;
+
+        case 4: // Z-Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            gfx_fill(x_raw + 1, y_raw + 1, 4, 4, false);
+            for (int i = 0; i < 4; i++)
+            {
+                gfx_px(x_raw + 4 - i, y_raw + 1 + i, true);
+                gfx_px(x_raw + 1 + i, y_raw + 1 + i, true);
+            }
+            break;
+
+        case 5: // J-Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            gfx_fill(x_raw + 1, y_raw + 1, 4, 4, false);
+            for (int i = 0; i < 4; i++)
+            {
+                gfx_px(x_raw + 4 - i, y_raw + 1 + i, true);
+            }
+            break;
+
+        case 6:
+        default: // L-Block
+            gfx_rect(x_raw, y_raw, 6, 6, true);
+            gfx_fill(x_raw + 1, y_raw + 1, 4, 4, false);
+            for (int i = 0; i < 4; i++)
+            {
+                gfx_px(x_raw + 1 + i, y_raw + 1 + i, true);
+            }
+            break;
+    }
 }
